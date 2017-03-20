@@ -4,6 +4,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def items_to_key(items):
     return ' '.join(items)
 
@@ -39,7 +40,16 @@ class Markov:
         for i in range(self.max_order, 0, -1):
             if len(chain) < i:
                 continue
-            response = self.db.get_random_response(items_to_key(chain[-i:]))
+            response = self._calculate_response(items_to_key(chain[-i:]))
             if response:
                 break
         return response
+
+    def _calculate_response(self, source):
+        rows = self.db.get_response_rows(source)
+        selected_response, total_count = None, 0
+        for response, count in rows:
+            total_count += count
+            if random.random() < count/total_count:
+                selected_response = response
+        return selected_response

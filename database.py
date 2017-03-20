@@ -221,12 +221,3 @@ class Database:
     def get_response_rows(self, source):
         query = "SELECT response, count FROM chains WHERE source=?"
         return self.conn.execute(query, (source, ))
-
-    def get_random_response(self, source):
-        rows = self.get_response_rows(source)
-        selected_response, total_count = None, 0
-        for response, count in rows:
-            total_count += count
-            if random.random() < count/total_count:
-                selected_response = response
-        return selected_response
