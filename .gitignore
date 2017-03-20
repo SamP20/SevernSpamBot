@@ -1,0 +1,6 @@
+.venv
+config.py
+data/
+__pycache__/
+*.py[cod]
+*.so
